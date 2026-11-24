@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cammeow_AOTR | Bio Links</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: { 'fade-in': 'fadeIn 0.5s ease-out' },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome cho Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Lớp phủ làm mờ và cân bằng ánh sáng cho cả điện thoại lẫn máy tính */
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 0;
+            transition: all 0.3s ease;
+        }
+        .dark .bg-overlay {
+            background: radial-gradient(circle at center, rgba(10, 14, 24, 0.42) 0%, rgba(5, 8, 15, 0.78) 100%);
+        }
+
+        /* Khung bao ngoài trên điện thoại để hiển thị trọn vẹn khung hình video ngang mà không bị méo hay cắt mất cảnh */
+        .mobile-video-stage {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            overflow: hidden;
+            background: #070a12;
+        }
+
+        /* Video nền mờ lấp đầy khoảng trống trên màn hình dọc */
+        .video-ambient {
+            position: absolute;
+            inset: -24px;
+            width: calc(100% + 48px);
+            height: calc(100% + 48px);
+            object-fit: cover;
+            filter: blur(22px) brightness(0.65) saturate(1.2);
+            transform: scale(1.06);
+        }
+
+        /* Video chính: trên điện thoại hiển thị đủ khung cảnh phía trên, trên máy tính phủ kín toàn màn hình */
+        .video-main {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 25%;
+        }
+
+        @media (max-width: 640px) {
+            .video-main {
+                height: 54vh;
+                object-fit: cover;
+                object-position: center 22%;
+                -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 62%, rgba(0, 0, 0, 0) 100%);
+                mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 62%, rgba(0, 0, 0, 0) 100%);
+            }
+        }
+        
+        /* Hiệu ứng nền kính mờ (Glassmorphism) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .dark .glass-card {
+            background: rgba(16, 20, 30, 0.68);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .dark .glass-card:hover {
+            background: rgba(28, 34, 48, 0.84);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .glass-card:active {
+            transform: scale(0.985);
+        }
+
+        .text-shadow { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); }
+        .dark .text-shadow { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9); }
+    </style>
+</head>
+<body class="min-h-screen text-slate-900 dark:text-white flex flex-col items-center justify-center relative overflow-x-hidden selection:bg-blue-500/30">
+    
+    <!-- Sân khấu video nền: đẹp cả màn ngang (PC) lẫn màn dọc (Mobile) -->
+    <div class="mobile-video-stage" aria-hidden="true">
+        <!-- Lớp nền mờ đồng màu bao phủ toàn bộ màn hình dọc -->
+        <video autoplay loop muted playsinline class="video-ambient sm:hidden">
+            <source src="cc.mp4" type="video/mp4">
+        </video>
+        <!-- Video chính hiển thị sắc nét -->
+        <video autoplay loop muted playsinline class="video-main">
+            <source src="cc.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Lớp phủ cân bằng độ tương phản -->
+    <div class="bg-overlay"></div>
+
+    <!-- Nút chuyển đổi Dark/Light Mode -->
+    <button onclick="toggleTheme()" aria-label="Đổi giao diện sáng tối" class="fixed top-4 right-4 w-11 h-11 rounded-full glass-card flex items-center justify-center z-20 focus:outline-none">
+        <i id="theme-icon" class="fa-solid fa-sun text-base text-amber-300"></i>
+    </button>
+
+    <main class="w-full max-w-[400px] mx-auto px-5 py-8 flex flex-col items-center animate-fade-in z-10">
+        
+        <!-- Avatar -->
+        <div class="relative mb-4 group">
+            <img src="AVATAR.png" 
+                 alt="Cammeow_AOTR" 
+                 class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-[3px] border-white/85 dark:border-white/25 group-hover:border-blue-400 shadow-2xl object-[center_20%]">
+        </div>
+
+        <!-- Thông tin cá nhân -->
+        <h1 class="text-xl sm:text-2xl font-extrabold tracking-wide text-shadow mb-1">Cammeow_AOTR</h1>
+        <p class="text-xs sm:text-sm text-slate-700 dark:text-white/75 font-medium tracking-wide text-shadow mb-6">Connect with me</p>
+
+        <!-- Danh sách Liên kết -->
+        <div class="w-full space-y-3">
+
+            <!-- Link TikTok -->
+            <a href="https://www.tiktok.com/@cammeow_aotr" target="_blank" rel="noopener noreferrer" class="glass-card flex items-center justify-between px-4 py-3.5 rounded-2xl no-underline text-inherit">
+                <span class="w-9 h-9 rounded-xl bg-black/10 dark:bg-white/10 flex items-center justify-center shrink-0">
+                    <i class="fa-brands fa-tiktok text-lg text-slate-900 dark:text-white"></i>
+                </span>
+                <span class="font-bold text-[15px] tracking-wide">TikTok</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-50 w-5 text-right"></i>
+            </a>
+
+            <!-- Link Zalo -->
+            <a href="https://zalo.me/0867244642" target="_blank" rel="noopener noreferrer" class="glass-card flex items-center justify-between px-4 py-3.5 rounded-2xl no-underline text-inherit">
+                <span class="w-9 h-9 rounded-xl bg-sky-500/15 dark:bg-sky-400/15 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-comment-dots text-lg text-sky-600 dark:text-sky-400"></i>
+                </span>
+                <span class="font-bold text-[15px] tracking-wide">Zalo</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-50 w-5 text-right"></i>
+            </a>
+
+            <!-- Link Discord -->
+            <a href="https://discord.gg/eKKUsRZK" target="_blank" rel="noopener noreferrer" class="glass-card flex items-center justify-between px-4 py-3.5 rounded-2xl no-underline text-inherit">
+                <span class="w-9 h-9 rounded-xl bg-indigo-500/15 dark:bg-indigo-400/15 flex items-center justify-center shrink-0">
+                    <i class="fa-brands fa-discord text-lg text-indigo-600 dark:text-indigo-400"></i>
+                </span>
+                <span class="font-bold text-[15px] tracking-wide">Discord</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-50 w-5 text-right"></i>
+            </a>
+            
+        </div>
+    </main>
+
+    <!-- Script xử lý Dark Mode -->
+    <script>
+        const htmlElement = document.documentElement;
+        const themeIcon = document.getElementById('theme-icon');
+
+        function toggleTheme() {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun', 'text-amber-300');
+                themeIcon.classList.add('fa-moon', 'text-slate-700');
+            } else {
+                htmlElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon', 'text-slate-700');
+                themeIcon.classList.add('fa-sun', 'text-amber-300');
+            }
+        }
+    </script>
+</body>
+</html>
